@@ -37,6 +37,10 @@ const sessionOptions = {
     secret: "mysupersecretcode",
     resave: false,
     saveUninitialised: true,
+    cookie:{
+        expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
+        maxAge: Date.now() +  7 * 24 * 60 * 60 * 1000,
+    }
 };
 
 app.use(session(sessionOptions));
