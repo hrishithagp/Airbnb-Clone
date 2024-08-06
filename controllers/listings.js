@@ -35,24 +35,33 @@ module.exports.createListing = async (req, res, next) => {
     newListing.image = {url, filename};
     await newListing.save();
     req.flash("success", "New Listing Created");
-    res.redirect("/listings");
+    res.redirect(`/listings/${newListing._id}`);
 };
 
-module.exports.editListing = async (req,res)=>{
+module.exports.renderEditForm = async (req,res)=>{
     let {id} = req.params;
     let listing = await Listing.findById(id);
     if(!listing){
         req.flash("error","Listing you requested for doesnot exist");
         return res.redirect("/listings");
     }
-    res.render("listings/edit.ejs",{listing});
+    let originalImageUrl = listing.image.url;
+    console.log(originalImageUrl);
+    originalImageUrl.replace("/upload","/upload/h_300,w_250");
+    res.render("listings/edit.ejs",{listing, originalImageUrl});
 };
 
 module.exports.updateListing = async (req,res)=>{
+    let {id} = req.params;
+    let listing = await Listing.findByIdAndUpdate(id,{...req.body.listing});
+    
+    if(typeof req.file !== "undefined"){
     let url = req.file.path;
     let filename = req.file.filename;
-    let {id} = req.params;
-    await Listing.findByIdAndUpdate(id,{...req.body.listing});
+    listing.image = {url, filename};
+    }
+    await listing.save();
+
     req.flash("success","Listing Updated")
     res.redirect(`/listings/${id}`);
 };
