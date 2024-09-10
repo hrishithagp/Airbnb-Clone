@@ -1,5 +1,7 @@
 const Listing = require("../models/listing");
 
+// maptilersdk.config.apiKey = process.env.MAPTILER_API_KEY;
+
 module.exports.index = async (req, res) => {
     const allListings = await Listing.find({});
     res.render("listings/index.ejs", { allListings });
@@ -28,6 +30,9 @@ module.exports.showListings = async (req,res)=>{
 };
 
 module.exports.createListing = async (req, res, next) => {
+    // const result = await maptilerClient.geocoding.forward('New Delhi');
+    // console.log(result);
+    // res.send("done");
     let url = req.file.path;
     let filename = req.file.filename;
     const newListing = new Listing(req.body.listing);
@@ -71,4 +76,12 @@ module.exports.destroyListing = async(req,res)=>{
     await Listing.findByIdAndDelete(id);
     req.flash("success","Listing Deleted");
     res.redirect("/listings");
+};
+
+module.exports.renderFilterPage = async (req, res) => {
+        let { filterId } = req.params;
+        // console.log('Received filterId:', filterId);
+        const allListings = await Listing.find({ category: filterId });
+        //console.log(allListings);
+        res.render("listings/index.ejs", { allListings });
 };

@@ -24,7 +24,11 @@ const listingSchema = new Schema({
     owner:{
         type: Schema.Types.ObjectId,
         ref: "User",
-    }
+    },
+    category: {
+        type: String,
+        enum: ["trending","rooms","city","mountain","castle","pool","camp","farm","arctic"],
+    },
 });
 
 const Listing = mongoose.model("Listing",listingSchema);
