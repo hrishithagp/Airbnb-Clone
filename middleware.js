@@ -3,6 +3,19 @@ const Review = require("./models/review.js");
 const ExpressError= require("./utils/ExpressError.js");
 const {listingSchema, reviewSchema} = require("./schema.js");
 
+// module.exports.normalizeListings = async (req,res,next) =>{
+//         const listings = await Listing.find({});
+//         for (let listing of listings) {
+//             const normalizedLocation = listing.location.trim().replace(/\s+/g, ' ').toLowerCase();
+//             // Only update the listing if normalization changes the value
+//             if (listing.location !== normalizedLocation) {
+//                 listing.location = normalizedLocation;
+//                 await listing.save();
+//             }
+//         }
+//         next();
+// };
+
 module.exports.isLoggedIn = (req,res,next)=>{
     if(!req.isAuthenticated()){
         //redirectUrl to be saved for post-login
@@ -40,7 +53,7 @@ module.exports.validateReview = (req,res,next)=>{
 module.exports.isOwner = async(req,res,next)=>{
     let {id} = req.params;
     let listing = await Listing.findById(id);
-    console.log(listing.owner._id);
+    // console.log(listing.owner._id);
     if(!listing.owner._id.equals(res.locals.currentUser._id)){
         req.flash(error,"You are not the owner of this listing.");
         return res.redirect(`/listings/${id}`);

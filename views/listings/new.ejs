@@ -14,7 +14,21 @@
             <textarea  name="listing[description]" placeholder="Enter description" class="form-control" required></textarea>
             <div class="invalid-feedback">Please enter short description</div>
         </div>
-
+        <div class="mb-3">
+            <label for="category" class="form-label" required>Category</label>
+            <select class="form-select form-select-sm" name="listing[category]" class="form-control" aria-label=".form-select-sm example" required>
+                <option selected>Choose One Category</option>
+                <option value="rooms">Rooms</option>
+                <option value="city">City</option>
+                <option value="mountain">Mountain</option>
+                <option value="castle">Castle</option>
+                <option value="pool">Pool</option>
+                <option value="camp">Camp</option>
+                <option value="farm">Farm</option>
+                <option value="arctic">Arctic</option>
+            </select>
+            <div class="invalid-feedback">Please select one category</div>
+        </div>
         <div class="mb-3">
             <label for="image" class="form-label">Upload Listing Image</label>
             <input name="listing[image]" type="file" class="form-control">

@@ -51,7 +51,7 @@ module.exports.renderEditForm = async (req,res)=>{
         return res.redirect("/listings");
     }
     let originalImageUrl = listing.image.url;
-    console.log(originalImageUrl);
+    // console.log(originalImageUrl);
     originalImageUrl.replace("/upload","/upload/h_300,w_250");
     res.render("listings/edit.ejs",{listing, originalImageUrl});
 };
@@ -85,3 +85,17 @@ module.exports.renderFilterPage = async (req, res) => {
         //console.log(allListings);
         res.render("listings/index.ejs", { allListings });
 };
+
+module.exports.renderSearchPage = async (req, res) => {
+    let userInput  = req.query.search;
+    userInput = userInput.trim().replace(/\s+/g, ' ').toLowerCase();  // Normalize spaces and case
+    const searchRegex = userInput.split(' ').join('\\s+'); // Handle multiple spaces
+        // Query the normalized location field in the database
+        const allListings = await Listing.find({ 
+            location: { 
+                $regex: new RegExp(`^${searchRegex}$`, 'i')  // Case-insensitive, match with multiple spaces
+            }
+        });
+        // console.log(allListings);  // Log the matched listings
+        res.render("listings/index.ejs", { allListings });  // Render the results in the listings page
+    };
